@@ -6,7 +6,7 @@ class FileOpenFrame(ttk.Frame):
     """
     ファイルの読み込み用フレーム
     """
-    def __init__(self, master,file_entry_width=100):
+    def __init__(self, master,file_entry_width=50):
         super().__init__(master)
         self.filePath = StringVar()
         self.createWidget(file_entry_width)
@@ -367,7 +367,9 @@ class CSVView(ttk.Frame):
         """
         ファイルパスの取得
         """
-        return self.file_path_frame.getFilePath()
+        #return self.file_path_frame.getFilePath()
+        path = 'data.csv'
+        return path
     def setReadButtonCommand(self,func):
         """
         読み込みボタンコマンド登録
