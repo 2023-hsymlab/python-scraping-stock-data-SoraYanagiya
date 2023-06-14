@@ -1,6 +1,7 @@
 import csv
 import tkinter.messagebox as messagebox
 from tkinter import *
+from tkcalendar import Calendar, DateEntry
 import tkinter.ttk as ttk
 from csvview import CSVView
 import os
@@ -75,6 +76,7 @@ class CSVControl:
         self.view = CSVView(master)
         self.logic = CSVLogic()
         self.view.setReadButtonCommand(self.readButtonCommand)
+        self.readButtonCommand()
         master.mainloop()
 
     def readButtonCommand(self):
@@ -111,12 +113,14 @@ class CSVControl:
         file_path = self.view.getFilePath()
         if os.path.exists(file_path) :
             ret = self.logic.readCsv(file_path)
+        '''
         if ret:
             messagebox.showinfo("readcsv","succeed")
         else:
             messagebox.showerror("readcsv","failed")
+        '''
         return self.logic.getHeader(),self.logic.getData()
 
 if __name__ == '__main__':
     control =  CSVControl()
-    # control.readCsv()
+    #control.readCsv()

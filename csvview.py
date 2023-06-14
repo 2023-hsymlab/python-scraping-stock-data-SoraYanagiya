@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter.ttk as ttk
 import tkinter.filedialog as filedialog
+from tkcalendar import Calendar, DateEntry
 
 class FileOpenFrame(ttk.Frame):
     """
@@ -9,19 +10,22 @@ class FileOpenFrame(ttk.Frame):
     def __init__(self, master,file_entry_width=50):
         super().__init__(master)
         self.filePath = StringVar()
-        self.createWidget(file_entry_width)
+        #self.createWidget(file_entry_width)
         self.pack()
 
-    def createWidget(self,entry_width):
-        filePathLabel = ttk.Label(self,text="FilePath")
-        filePathLabel.grid(column=0,row=0)
-        filepathEntry = ttk.Entry(self,textvariable=self.filePath,widt=entry_width)
-        filepathEntry.grid(column=1,row=0)
-        filepathButton = ttk.Button(self,text="open",command=self.openFileDialog)
-        filepathButton.grid(column=2,row=0)
-        self.readButton = ttk.Button(self,text="read")
-        self.readButton.grid(column=3,row=0)
+    '''
+    #def createWidget(self,entry_width):
+        #filePathLabel = ttk.Label(self,text="FilePath")
+        #filePathLabel.grid(column=0,row=0)
+        #filepathEntry = ttk.Entry(self,textvariable=self.filePath,widt=entry_width)
+        #filepathEntry.grid(column=1,row=0)
+        #filepathButton = ttk.Button(self,text="open",command=self.openFileDialog)
+        #filepathButton.grid(column=2,row=0)
+        #self.readButton = ttk.Button(self,text="read")
+        #self.readButton.grid(column=3,row=0)
+        
 
+    
     def openFileDialog(self):
         """
         ファイルダイアログを開く
@@ -32,11 +36,13 @@ class FileOpenFrame(ttk.Frame):
     def getFilePath(self):
         return self.filePath.get()
 
+    
     def setReadButtonCommand(self,func):
         """
         読み込みを押したときのコマンドを指定する
         """
-        self.readButton["command"] = func
+        #self.readButton["command"] = func
+    '''
 
 
 class TreeView(ttk.Frame):
@@ -244,6 +250,15 @@ class PropertyView(ttk.Frame):
         button_frame.pack(anchor="e")
         self.update_button = update = ttk.Button(button_frame,text = "commit")
         self.insert_button = insert = ttk.Button(button_frame,text = "insert")
+        style = ttk.Style()
+        style.configure('my.DateEntry',
+                        fieldbackground='light green',
+                        background='dark green',
+                        foreground='dark orange',
+                        arrowcolor='white')
+
+        self.data_entry_date = DateEntry(style='my.DateEntry',showweeknumbers=False)
+        self.data_entry_date.place(x=250, y=230)
         update.pack(side="left")
         insert.pack(side="left")
 
@@ -374,7 +389,7 @@ class CSVView(ttk.Frame):
         """
         読み込みボタンコマンド登録
         """
-        self.file_path_frame.setReadButtonCommand(func)
+        #self.file_path_frame.setReadButtonCommand(func)
     def setNewColumnAndData(self,columns,rows):
         """
         新しい列名とレコードを設定する。
