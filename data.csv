@@ -1,6 +1,6 @@
-name,code,amount
-Nintendo,7974.JP,100
-Namco,7832.JP,100
-JREast,9020.JP,200
-JRWest,9021.JP,200
-JRTokai,9022.JP,100
+name,code,amount,date
+Nintendo,7974.JP,100,2023-06-20
+Namco,7832.JP,100,
+JREast,9020.JP,200,
+JRWest,9021.JP,200,
+JRTokai,9022.JP,100,

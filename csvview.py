@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter.ttk as ttk
 import tkinter.filedialog as filedialog
 from tkcalendar import Calendar, DateEntry
+import datetime
 
 class FileOpenFrame(ttk.Frame):
     """
@@ -164,7 +165,10 @@ class TreeView(ttk.Frame):
         """
         data =[]
         for column in self.columns:
-            data.append(value_dict[column])
+            if column == 'date':
+                data.append(datetime.date.today())
+            else:
+                data.append(value_dict[column])
         self.updateValue(data)
 
     def insert(self,value_dict):
@@ -174,7 +178,10 @@ class TreeView(ttk.Frame):
         """
         data =[]
         for column in self.columns:
-            data.append(value_dict[column])
+            if column == 'date':
+                data.append(datetime.date.today())
+            else:
+                data.append(value_dict[column])
         children = self.tree.get_children("")
         index = len(children)
         self.setRow(index = str(index), row_data=data)
@@ -251,14 +258,7 @@ class PropertyView(ttk.Frame):
         self.update_button = update = ttk.Button(button_frame,text = "commit")
         self.insert_button = insert = ttk.Button(button_frame,text = "insert")
         '''
-        style = ttk.Style()
-        style.configure('my.DateEntry',
-                        fieldbackground='light green',
-                        background='dark green',
-                        foreground='dark orange',
-                        arrowcolor='white')
-
-        self.data_entry_date = DateEntry(style='my.DateEntry',showweeknumbers=False)
+        self.data_entry_date = DateEntry(showweeknumbers=False)
         self.data_entry_date.place(x=250, y=230)
         '''
         update.pack(side="left")
