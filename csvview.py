@@ -1,3 +1,4 @@
+import tkinter as tk
 from tkinter import *
 import tkinter.ttk as ttk
 import tkinter.filedialog as filedialog
@@ -171,7 +172,7 @@ class TreeView(ttk.Frame):
                 data.append(value_dict[column])
         self.updateValue(data)
 
-    def insert(self,value_dict):
+    def insert(self,value_dict,date):
         """
         マップからリストに変更後
         新規レコードの挿入
@@ -179,7 +180,7 @@ class TreeView(ttk.Frame):
         data =[]
         for column in self.columns:
             if column == 'date':
-                data.append(datetime.date.today())
+                data.append(date)
             else:
                 data.append(value_dict[column])
         children = self.tree.get_children("")
@@ -241,11 +242,19 @@ class PropertyView(ttk.Frame):
         self.delete()
         self.param_dict ={}
         for column in columns:
-            option = {"width":10}
-            param = LabelEntryWidget(self,text = column)
-            param.setLabelOption(option)
-            param.pack()
-            self.param_dict[column] = param.getVar()
+            if column == 'date':
+                option = {"width":10}
+                frame = Frame(self)
+
+                self.data_entry_date = DateEntry(frame, showweeknumbers=False)
+                self.data_entry_date.grid()
+                frame.pack()
+            else:
+                option = {"width":10}
+                param = LabelEntryWidget(self,text = column)
+                param.setLabelOption(option)
+                param.pack()
+                self.param_dict[column] = param.getVar()
         self.createInsertUpdateButton()
         self.createSaveButton()
 
@@ -306,6 +315,9 @@ class PropertyView(ttk.Frame):
         for key,value in self.param_dict.items():
             param_dict[key] = value.get()
         return param_dict
+    
+    def getDate(self):
+        return self.data_entry_date.get_date()
 
 
 class CSVView(ttk.Frame):
@@ -367,7 +379,8 @@ class CSVView(ttk.Frame):
             挿入アクション
             """
             param = self.property.getParameter()
-            self.tree.insert(param)
+            date = self.property.getDate()
+            self.tree.insert(param, date)
 
         def _func(event):
             """
