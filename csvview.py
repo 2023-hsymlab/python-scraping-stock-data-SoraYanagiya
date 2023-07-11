@@ -4,6 +4,8 @@ import tkinter.ttk as ttk
 import tkinter.filedialog as filedialog
 from tkcalendar import Calendar, DateEntry
 import datetime
+from datetime import datetime as dt
+import tkinter.messagebox as messagebox
 
 class FileOpenFrame(ttk.Frame):
     """
@@ -159,33 +161,60 @@ class TreeView(ttk.Frame):
         現在選択されているレコードの値の更新
         """
         self.tree.item(self.selcted_iid,values=new_values)
-    def update(self,value_dict):
+    def update(self,value_dict,date):
         """
         マップからリストに変更後
         値の更新
         """
+        flag = 0
+        data =[]
+        now = dt.now()
+        today = str(now.year) + '-' + str(now.month) + '-' + str(now.day)
+        today2 = dt.strptime(today, '%Y-%m-%d')
+        date1 = str(date.year) + '-' + str(date.month) + '-' + str(date.day)
+        date2 = dt.strptime(date1, '%Y-%m-%d')
+        for column in self.columns:
+            if column == 'date':
+                if date2 > today2:
+                    flag = 1
+                data.append(date)
+            else:
+                if column == 'amount':
+                    num = value_dict[column]
+                    if float(num) % 100 != 0:
+                        flag = 1
+                data.append(value_dict[column])
+        if flag == 1:
+            messagebox.showerror("writecsv","failed")
+        else:
+            self.updateValue(data)
+            messagebox.showinfo("writecsv","succeed")
+
+    def insert(self,value_dict):
+        """
+        マップからリストに変更後
+        新規レコードの挿入
+        """
+        flag = 0
         data =[]
         for column in self.columns:
             if column == 'date':
                 data.append(datetime.date.today())
             else:
+                if column == 'amount':
+                    num = value_dict[column]
+                    if float(num) % 100 != 0:
+                        flag = 1
                 data.append(value_dict[column])
-        self.updateValue(data)
-
-    def insert(self,value_dict,date):
-        """
-        マップからリストに変更後
-        新規レコードの挿入
-        """
-        data =[]
-        for column in self.columns:
-            if column == 'date':
-                data.append(date)
-            else:
-                data.append(value_dict[column])
-        children = self.tree.get_children("")
-        index = len(children)
-        self.setRow(index = str(index), row_data=data)
+        
+        if flag == 1:
+            messagebox.showerror("writecsv","failed")
+        else:
+            children = self.tree.get_children("")
+            index = len(children)
+            self.setRow(index = str(index), row_data=data)
+            messagebox.showinfo("writecsv","succeed")
+            
 
 class LabelEntryWidget(ttk.Frame):
     """
@@ -264,8 +293,8 @@ class PropertyView(ttk.Frame):
         """
         button_frame = ttk.Frame(self)
         button_frame.pack(anchor="e")
-        self.update_button = update = ttk.Button(button_frame,text = "commit")
-        self.insert_button = insert = ttk.Button(button_frame,text = "insert")
+        self.update_button = update = ttk.Button(button_frame,text = "CHANGE")
+        self.insert_button = insert = ttk.Button(button_frame,text = "BUY")
         '''
         self.data_entry_date = DateEntry(showweeknumbers=False)
         self.data_entry_date.place(x=250, y=230)
@@ -373,14 +402,14 @@ class CSVView(ttk.Frame):
             """
             param = self.property.getParameter()
             print(param)
-            self.tree.update(param)
+            date = self.property.getDate()
+            self.tree.update(param, date)
         def _insertCommand():
             """
             挿入アクション
             """
             param = self.property.getParameter()
-            date = self.property.getDate()
-            self.tree.insert(param, date)
+            self.tree.insert(param)
 
         def _func(event):
             """
