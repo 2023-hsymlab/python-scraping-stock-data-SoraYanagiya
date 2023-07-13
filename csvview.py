@@ -166,6 +166,7 @@ class TreeView(ttk.Frame):
         マップからリストに変更後
         値の更新
         """
+        #エラー処理もしたよ
         flag = 0
         data =[]
         now = dt.now()
